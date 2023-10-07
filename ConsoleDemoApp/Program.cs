@@ -25,6 +25,10 @@ IHostBuilder CreateHostBuilder(string[] strings)
         {
             services.AddScoped<IAnimals, Domestic>();
             services.AddScoped<IAnimals, Wild>();
+
+            services.AddScoped<Domestic>();
+            services.AddScoped<Wild>();
+
             services.AddSingleton<App>();
         });
 }
