@@ -24,6 +24,7 @@ IHostBuilder CreateHostBuilder(string[] strings)
         .ConfigureServices((_, services) =>
         {
             services.AddScoped<IAnimals, Domestic>();
+            services.AddScoped<IAnimals, Wild>();
             services.AddSingleton<App>();
         });
 }
