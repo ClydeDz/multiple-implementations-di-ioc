@@ -18,16 +18,28 @@ catch (Exception e)
     Console.WriteLine(e.Message);
 }
 
+
 IHostBuilder CreateHostBuilder(string[] strings)
 {
+
     return Host.CreateDefaultBuilder()
         .ConfigureServices((_, services) =>
         {
-            services.AddScoped<IAnimals, Domestic>();
-            services.AddScoped<IAnimals, Wild>();
-
             services.AddScoped<Domestic>();
             services.AddScoped<Wild>();
+
+            services.AddTransient<Func<AnimalTypes, IAnimals>>(serviceProvider => serviceTypeName =>
+            {
+                switch (serviceTypeName)
+                {
+                    case AnimalTypes.Domestic:
+                        return serviceProvider.GetService<Domestic>()!;
+                    case AnimalTypes.Wild:
+                        return serviceProvider.GetService<Wild>()!;
+                    default:
+                        return null;
+                }
+            });
 
             services.AddSingleton<App>();
         });

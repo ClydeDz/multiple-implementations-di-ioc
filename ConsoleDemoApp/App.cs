@@ -1,6 +1,5 @@
 ﻿using ConsoleDemoApp.Implementation;
 using ConsoleDemoApp.Interface;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace ConsoleDemoApp;
 
@@ -9,15 +8,10 @@ public class App
     private readonly IAnimals _domestic;
     private readonly IAnimals _wild;
 
-    public App(IEnumerable<IAnimals> animals, IServiceProvider serviceProvider)
+    public App(Func<AnimalTypes, IAnimals> serviceResolver)
     {
-        foreach (var animal in animals)
-        {
-            if (animal.GetType() == typeof(Domestic))
-                _domestic = serviceProvider.GetService<Domestic>()!;
-            if (animal.GetType() == typeof(Wild))
-                _wild = serviceProvider.GetService<Wild>()!;
-        }
+        _domestic = serviceResolver(AnimalTypes.Domestic);
+        _wild = serviceResolver(AnimalTypes.Wild);
     }
 
     public void Run(string[] args)
